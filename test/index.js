@@ -185,7 +185,12 @@ describe('K7Mongoose', () => {
                 expect(db).to.include('mongoose');
                 expect(db).to.include('User');
 
-                const userData = { name: 'Mark', password: '123pin', username: `mk${new Date().getTime()}`, email: `mark${new Date().getTime()}@example.com` }
+                const userData = {
+                    name: 'Mark',
+                    password: '123pin',
+                    username: `mk${new Date().getTime()}`,
+                    email: `mark${new Date().getTime()}@example.com`
+                };
                 const save = db.User(userData).save().catch((err) => console.log(err));
 
                 expect(save).to.be.an.instanceof(global.Promise);
