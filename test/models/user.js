@@ -1,6 +1,6 @@
 'use strict';
 
-const Mongoose = require('mongoose');
+const Mongoose = require('../../lib/index').mongoose();
 
 const Schema = new Mongoose.Schema({
     name: {

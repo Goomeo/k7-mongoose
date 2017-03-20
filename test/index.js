@@ -132,6 +132,76 @@ describe('K7Mongoose', () => {
             });
         });
 
+        it('returns an instance of native promise when passed as a configuration', (done) => {
+
+            const options = {
+                connectionString: 'mongodb://localhost:27017/K7Mongoose',
+                models: Path.join(process.cwd(), 'test/models/user.js'),
+                promise: global.Promise,
+                events: {
+                    connected: () => {},
+                    disconnected: () => {},
+                    error: () => {}
+                }
+            };
+
+            const k7Mongoose = new K7Mongoose(options);
+
+            k7Mongoose.load((err, db) => {
+
+                expect(err).to.not.exist();
+                expect(db).to.include('mongoose');
+                expect(db).to.include('User');
+
+                const query = db.User.findOne({});
+
+                expect(query.exec().constructor).to.be.equal(global.Promise);
+
+                db.mongoose.close(() => {
+
+                    return done();
+                });
+            });
+        });
+
+        it('returns an instance of native promise when passed as a configuration and try save', (done) => {
+
+            const options = {
+                connectionString: 'mongodb://localhost:27017/K7Mongoose',
+                models: Path.join(process.cwd(), 'test/models/user.js'),
+                promise: global.Promise,
+                events: {
+                    connected: () => {},
+                    disconnected: () => {},
+                    error: () => {}
+                }
+            };
+
+            const k7Mongoose = new K7Mongoose(options);
+
+            k7Mongoose.load((err, db) => {
+
+                expect(err).to.not.exist();
+                expect(db).to.include('mongoose');
+                expect(db).to.include('User');
+
+                const userData = {
+                    name: 'Mark',
+                    password: '123pin',
+                    username: `mk${new Date().getTime()}`,
+                    email: `mark${new Date().getTime()}@example.com`
+                };
+                const save = db.User(userData).save().catch((err) => console.log(err));
+
+                expect(save).to.be.an.instanceof(global.Promise);
+
+                db.mongoose.close(() => {
+
+                    return done();
+                });
+            });
+        });
+
         it('returns an error when an invalid file is passed', (done) => {
 
             const options = {
