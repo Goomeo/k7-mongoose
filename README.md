@@ -16,7 +16,8 @@ Server.connection({host: 'localhost'});
 
 let options = {
     adapter: require('k7-mongoose'),
-    connectionString: 'mongodb://localhost:27017/K7Mongoose'
+    connectionString: 'mongodb://localhost:27017/K7Mongoose',
+    promise: global.Promise
 };
 
 Server.register({
